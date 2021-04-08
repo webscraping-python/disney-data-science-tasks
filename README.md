@@ -238,6 +238,44 @@ def get_content_value(row_data):
 
 Y guardamos el `data_cleaned.json`
 
+
+### Convertir `Running time` en número
+~~~python
+print([movie.get('Running time', 'N/A') for movie in movie_info_list])
+['41 minutes (74 minutes 1966 release)', '83 minutes', '88 minutes', '126 minutes', '74 minutes', '64 minutes', '70 minutes', '42 minutes', '65 min.', '71 minutes', '75 minutes', '94 minutes', '73 minutes', '75 minutes', '82 minutes', '68 minutes', '74 minutes', '96 minutes', '75 minutes', '84 minutes', '77 minutes', '92 minutes', '69 minutes', '81 minutes', ['60 minutes (VHS version)', '71 minutes (original)'], '127 minutes', '92 minutes', '76 minutes', '75 minutes', '73 minutes', '85 minutes', '81 minutes', '70 minutes', '90 min.', '80 minutes', '75 minutes', '83 minutes', '83 minutes', '72 minutes', '97 minutes', '75 minutes', '104 minutes', '93 minutes', '105 minutes', '95 minutes', '97 minutes', '134 minutes', '69 minutes', '92 minutes', '126 minutes', '79 minutes', '97 minutes', '128 minutes', '74 minutes', '91 minutes', '105 minutes', '98 minutes', '130 minutes', '89 min.', '93 minutes', '67 minutes', '98 minutes', '100 minutes', '118 minutes', '103 Minutes', '110 minutes', '80 min.', '79 minutes', '91 minutes', '91 minutes', '97 minutes', '118 minutes', '139 minutes', '92 minutes', 
+~~~
+
+Creamos una función que nos devuelva los valores en enteros.
+Teniendo en cuenta que pueden venir solo un valor, en lista o no venir valor.
+~~~python
+def minutes_to_integer(running_time):
+    if running_time == 'N/A':
+        return None
+    if isinstance(running_time, list):
+        return int(running_time[0].split(' ')[0])
+    else:
+        return int(running_time.split(' ')[0])
+
+for movie in movie_info_list:
+    movie['Running time (int)'] = minutes_to_integer(movie.get('Running time', 'N/A'))
+
+[41, 83, 88, 126, 74, 64, 70, 42, 65, 71, 75, 94, 73, 75, 82, 68, 74, 96, 75, 84, 77, 92, 69, 81, 60, 127, 92, 76, 75, 73, 85, 81, 70, 90, 80, 75, 83, 83, 72, 97, 75, 104, 93, 105, 95, 97, 134, 69, 92, 126, 79, 97, 128, 74, 91, 105, 98, 130, 89, 93, 67, 98, 100, 118, 103, 110, 80, 79, 91, 91, 97, 118, 139, 92, 131, 87, 116, 93, 110, 110, 131, 101, 108, 84, 78, 75, 164, 106, 110, 99, 113, 108, 112, 93, 91, 93, 100, 100, 79, 96, 113, 89, 118, 92, 88, 92, 87, 93, 93, 93, 90, 83, 96, 88, 89, 91, 93, 92, 97, 100, 100, 89, 91, 112, 115, 95, 91, 95, 104, 74, 48, 77, 104, 128, 101, 94, 104, 90, 100, 88, 93, 98, 100, 112, 84, 98, 97, 114, 96,
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <hr>
 
 <a name="schema7"></a>
