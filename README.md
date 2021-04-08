@@ -120,12 +120,7 @@ movies = soup.select(".wikitable.sortable i a")
 ### Obtener la info 
 
 Usamos la función `get_content_value` anteriomente citada.
-~~~python
 
-def clean_tags(soup):
-    for tag in soup.find_all(["sup", "span"]):
-        tag.decompose()
-~~~
 
 La función `get_info_box` obtiene la información de las películas y nos devuelve una lista con ellas.
 
@@ -194,11 +189,39 @@ movie_info_list
 
 
 
+<hr>
+
+<a name="schema5"></a>
+
+# 5. Guardar o cargar datos
+Importamos la librería json
+~~~python
+import json
+~~~
+Creamos las funciones para guardar los datos y cargarlo
+~~~python
+
+def save_data(title,data):
+    with open(title, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+def load_data(title):
+    with open(title, encoding = 'utf-8') as f:
+        json.load(f)
+~~~
+
+Guardamos los datos
+~~~python
+save_data("./data/disney_data.json", movie_info_list)
+~~~
 
 
+# 6. Limpiar los datos
+~~~python
 
-
-
+def clean_tags(soup):
+    for tag in soup.find_all(["sup", "span"]):
+        tag.decompose()
+~~~
 
 
 
