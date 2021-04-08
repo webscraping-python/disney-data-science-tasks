@@ -105,14 +105,92 @@ movie_info
  'Box office': '$1.067 billion [1]'} 
 ~~~
 
+<hr>
+
+<a name="schema4"></a>
+
+# 4 Obtener cuadro de información para todas las películas
 
 
+~~~python
+r = requests.get("https://en.wikipedia.org/wiki/List_of_Walt_Disney_Pictures_films")
+soup = bs(r.content)
+movies = soup.select(".wikitable.sortable i a")
+~~~
+### Obtener la info 
 
+Usamos la función `get_content_value` anteriomente citada.
+~~~python
 
+def clean_tags(soup):
+    for tag in soup.find_all(["sup", "span"]):
+        tag.decompose()
+~~~
 
+La función `get_info_box` obtiene la información de las películas y nos devuelve una lista con ellas.
 
+~~~python
+def get_info_box(url):
+    movie_info = {}
+    r = requests.get(url)
+    soup = bs(r.content)
+    info_box = soup.find(class_="infobox vevent")
+    info_rows = info_box.find_all("tr")
+    
+    clean_tags(soup)
+    for index, row in enumerate(info_rows):
+        if index == 0:
+            movie_info['title'] = row.find("th").get_text(" ", strip=True)
+        else:
+            header = row.find('th')
+            if header:
+                content_key = row.find("th").get_text(" ", strip=True)
+                content_value = get_content_value(row.find("td"))
+                movie_info[content_key] = content_value
+            
+    return movie_info
+~~~
+Creamos un `base_path` al que le añadimos el resto del path que obtendremos, `relative_path` y vamos guardando en  `movie_info_list` todas las películas
 
+~~~python
+base_path = "https://en.wikipedia.org/"
 
+movie_info_list = []
+for index, movie in enumerate(movies):
+    if index == 5:
+        break
+    try:
+        relative_path = movie['href']
+       
+        full_path = base_path + relative_path
+        
+        #title = movie['title']
+        m = get_info_box(full_path)
+        
+        movie_info_list.append(m)
+        
+    # por si nos da error alguna película    
+    except Exception as e:
+        print(movie.get_text())
+        print(e)
+
+movie_info_list
+[{'title': 'Academy Award Review of',
+  'Production company': 'Walt Disney Productions',
+  'Release date': ['May 19, 1937'],
+  'Running time': '41 minutes (74 minutes 1966 release)',
+  'Country': 'United States',
+  'Language': 'English',
+  'Box office': '$45.472'},
+ {'title': 'Snow White and the Seven Dwarfs',
+  'Directed by': ['David Hand (supervising)',
+   'William Cottrell',
+   'Wilfred Jackson',
+   'Larry Morey',
+   'Perce Pearce',
+   'Ben Sharpsteen'],
+  'Produced by': 'Walt Disney',
+~~~
 
 
 
