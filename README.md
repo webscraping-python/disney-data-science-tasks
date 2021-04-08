@@ -216,6 +216,7 @@ save_data("./data/disney_data.json", movie_info_list)
 
 
 # 6. Limpiar los datos
+### Creamos una función que elimine los [1] [2]..., que estan contenidos en las etiquetas `sup` y `span`
 ~~~python
 
 def clean_tags(soup):
@@ -223,7 +224,19 @@ def clean_tags(soup):
         tag.decompose()
 ~~~
 
+### Separar las cadenas con nombres, no estaban en una `li`
+Tenemos que modificar `get_content_value` para que busque también la etiqueta `br` y los separe.
+~~~python
+def get_content_value(row_data):
+    if row_data.find("li"):
+        return [li.get_text(" ", strip=True).replace("\xa0", " ") for li in row_data.find_all("li")]
+    elif row_data.find('br'):
+        return [text for text in row_data.stripped_strings]
+    else:
+        return row_data.get_text(" ", strip=True).replace("\xa0", " ")
+~~~
 
+Y guardamos el `data_cleaned.json`
 
 <hr>
 
