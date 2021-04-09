@@ -285,15 +285,113 @@ for movie in movie_info_list:
 [None, 1490000.0, 2600000.0, 2280000.0, 600000.0, 950000.0, 858000.0, None, 788000.0, None, 1350000.0, 2125000.0, None, 1500000.0, 1500000.0, None, 2900000.0, 1800000.0, 3000000.0, None, 4000000.0, 2000000.0, 300000.0, 1800000.0, None, 5000000.0, None, 4000000.0, None, None, None, None, None, None, 700000.0, None, None, None, None, None, 6000000.0, 1000000.0, None, 2000000.0, None, None, 2500000.0, None, None, 4000000.0, 3600000.0,
 
 ~~~
+<hr>
+
+<a name="schema8"></a>
+
+# 8 Convertir las fechas a `datetimes`
+Creamos dos funciones, la primera para quitar si hay algún dato con parentesís.
+Y la segunda convierta las fechas  datetime
+~~~python
+from datetime import datetime
+def clean_date(date):
+    return date.split('(')[0].strip()
+def date_conversion(date):
+    if isinstance(date, list):
+        date = date[0]
+    if date == 'N/A':
+        return None
+    date_str =clean_date(date)
+    
+    fmts = ["%B %d, %Y", "%d %B %Y"]
+    for fmt in fmts:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except:
+            pass
+    return None
+
+
+for movie in movie_info_list:
+    movie['Release date (time)'] = date_conversion(movie.get('Release date', 'N/A'))
+
+ 'Release date (time)': datetime.datetime(1953, 2, 5, 0, 0)}
+~~~
+
+<hr>
+
+<a name="schema9"></a>
+
+# 9 Añadir IMDb/Rating
+Importamos las librerías necesarias. 
+Tenemos que trabajar con keys asi que cuidado con poner las cles visibles.
+
+~~~python
+import os
+from dotenv import load_dotenv
+load_dotenv()
+apikey=os.environ.get('TOKEN')
+
+import urllib3
+from urllib.parse import urlencode
+
+import requests
+~~~
+
+Creamos la funciones para obtener el rating de imbd
+~~~python
+def get_omdb_info(title):
+    base_url = "http://www.omdbapi.com/?"
+    parameters = {"apikey" :apikey,
+              't':title
+             }
+    params_encoded = urlencode(parameters)
+    full_url = base_url + params_encoded
+    return requests.get(full_url).json()
+
+for movie in movie_info_list:
+    title = movie['title']
+    omdb_info = get_omdb_info(title)
+    movie['imdb'] = omdb_info.get('imdbRating', None)
 
 
 
+'imdb': '6.3'}
+~~~
+<hr>
 
+<a name="schema10"></a>
 
+# 10. Guardar lo datos en JSON y CSV
+Hacemos una copia de las lista con las películas
+~~~python
+movie_info_copy = [movie.copy() for movie in movie_info_list]
+~~~
+Cambiamos el formato de `datetime`
+~~~python
+for movie in movie_info_copy:
+    current_date = movie['Release date (datetime)']
+    if current_date:
+        movie['Release date (datetime)'] = current_date.strftime("%B %d, %Y")
+    else:
+        movie['Release date (datetime)'] = None
+'April 20, 1946'
+~~~
+Guardamos como json
+~~~python
+save_data("disney_data_final.json", movie_info_copy)
+~~~
+Para guardar como csv, cremos un dateframe y es lo guardamos como csv
 
+~~~python
+import pandas as pd
 
-
-
+df = pd.DataFrame(movie_info_copy)
+df.to_csv("./data/disney_movie_data_final.csv")
+running_times = df.sort_values(['Running time (int)'],  ascending=False)
+running_times.head(20)
+~~~
+![img](./data/001.png)
 
 
 <hr>
@@ -307,3 +405,9 @@ https://github.com/KeithGalli/disney-data-science-tasks
 
 
 https://en.wikipedia.org/wiki/List_of_Walt_Disney_Pictures_films
+
+Necesita codificar manualmente los parámetros de consulta en la URL
+
+https://urllib3.readthedocs.io/en/latest/user-guide.html?highlight=urlencode#query-parameters
+
+http://www.omdbapi.com/
