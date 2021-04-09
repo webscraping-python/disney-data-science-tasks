@@ -214,6 +214,9 @@ Guardamos los datos
 save_data("./data/disney_data.json", movie_info_list)
 ~~~
 
+<hr>
+
+<a name="schema6"></a>
 
 # 6. Limpiar los datos
 ### Creamos una función que elimine los [1] [2]..., que estan contenidos en las etiquetas `sup` y `span`
@@ -262,9 +265,26 @@ for movie in movie_info_list:
 [41, 83, 88, 126, 74, 64, 70, 42, 65, 71, 75, 94, 73, 75, 82, 68, 74, 96, 75, 84, 77, 92, 69, 81, 60, 127, 92, 76, 75, 73, 85, 81, 70, 90, 80, 75, 83, 83, 72, 97, 75, 104, 93, 105, 95, 97, 134, 69, 92, 126, 79, 97, 128, 74, 91, 105, 98, 130, 89, 93, 67, 98, 100, 118, 103, 110, 80, 79, 91, 91, 97, 118, 139, 92, 131, 87, 116, 93, 110, 110, 131, 101, 108, 84, 78, 75, 164, 106, 110, 99, 113, 108, 112, 93, 91, 93, 100, 100, 79, 96, 113, 89, 118, 92, 88, 92, 87, 93, 93, 93, 90, 83, 96, 88, 89, 91, 93, 92, 97, 100, 100, 89, 91, 112, 115, 95, 91, 95, 104, 74, 48, 77, 104, 128, 101, 94, 104, 90, 100, 88, 93, 98, 100, 112, 84, 98, 97, 114, 96,
 ~~~
 
+<hr>
+
+<a name="schema7"></a>
 
 
+# 7 Convertir los valores de  `Budget`y `Box office` a decimal
 
+Importamos las funciones de la carpeta `src`
+~~~python
+from src.conversion import *
+~~~
+La función de conversion lo que hace es a través de `regex` cambiar el formato que viene esos datos a float
+
+~~~Python
+for movie in movie_info_list:
+    movie['Budget (float)'] = money_conversion(movie.get('Budget', 'N/A'))
+    movie['Box office (float)'] = money_conversion(movie.get('Box office', 'N/A'))
+[None, 1490000.0, 2600000.0, 2280000.0, 600000.0, 950000.0, 858000.0, None, 788000.0, None, 1350000.0, 2125000.0, None, 1500000.0, 1500000.0, None, 2900000.0, 1800000.0, 3000000.0, None, 4000000.0, 2000000.0, 300000.0, 1800000.0, None, 5000000.0, None, 4000000.0, None, None, None, None, None, None, 700000.0, None, None, None, None, None, 6000000.0, 1000000.0, None, 2000000.0, None, None, 2500000.0, None, None, 4000000.0, 3600000.0,
+
+~~~
 
 
 
