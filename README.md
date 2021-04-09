@@ -405,7 +405,7 @@ df.to_csv("./data/disney_movie_data_final.csv")
 running_times = df.sort_values(['Running time (int)'],  ascending=False)
 running_times.head(20)
 ~~~
-![img](./data/001.png)
+![img](./images/001.png)
 
 
 <hr>
