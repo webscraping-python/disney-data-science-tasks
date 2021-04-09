@@ -1,6 +1,16 @@
 # disney data science tasks
 
 1. [Importar librerías ](#schema1)
+2. [Cargar la pagina web y convertir a un objeto BeautifulSoup](#schema2)
+3. [Creamos un diccionario con las información](#schema3)
+4. [Obtener cuadro de información para todas las películas](#schema4)
+5. [Guardar o cargar datos](#schema5)
+6. [Limpiar los datos](#schema6)
+7. [Convertir los valores de  `Budget`y `Box office` a decimal](#schema7)
+8. [Convertir las fechas a `datetimes`](#schema8)
+9. [Añadir IMDb/Rating](#schema9)
+10. [Guardar lo datos en JSON y CSV](#schema10)
+11. [Documentación](#schema11)
 
 <hr>
 
@@ -194,6 +204,7 @@ movie_info_list
 <a name="schema5"></a>
 
 # 5. Guardar o cargar datos
+
 Importamos la librería json
 ~~~python
 import json
@@ -290,6 +301,7 @@ for movie in movie_info_list:
 <a name="schema8"></a>
 
 # 8 Convertir las fechas a `datetimes`
+
 Creamos dos funciones, la primera para quitar si hay algún dato con parentesís.
 Y la segunda convierta las fechas  datetime
 ~~~python
@@ -323,6 +335,7 @@ for movie in movie_info_list:
 <a name="schema9"></a>
 
 # 9 Añadir IMDb/Rating
+
 Importamos las librerías necesarias. 
 Tenemos que trabajar con keys asi que cuidado con poner las cles visibles.
 
@@ -363,6 +376,7 @@ for movie in movie_info_list:
 <a name="schema10"></a>
 
 # 10. Guardar lo datos en JSON y CSV
+
 Hacemos una copia de las lista con las películas
 ~~~python
 movie_info_copy = [movie.copy() for movie in movie_info_list]
@@ -396,9 +410,9 @@ running_times.head(20)
 
 <hr>
 
-<a name="schema7"></a>
+<a name="schema11"></a>
 
-# 7. Documentación
+# 11. Documentación
 https://www.youtube.com/watch?v=Ewgy-G9cmbg&t=93s
 
 https://github.com/KeithGalli/disney-data-science-tasks
@@ -406,7 +420,6 @@ https://github.com/KeithGalli/disney-data-science-tasks
 
 https://en.wikipedia.org/wiki/List_of_Walt_Disney_Pictures_films
 
-Necesita codificar manualmente los parámetros de consulta en la URL
 
 https://urllib3.readthedocs.io/en/latest/user-guide.html?highlight=urlencode#query-parameters
 
